@@ -72,7 +72,14 @@ nzbApi.downloadNzb(nzbId, function(err, result) {
 
 ### Testing
 
-Not implemented yet
+First you will need to set the bash variables:
+
+```
+export NZB_API_APIENDPOINT="http://some.nzb.indexer.com/api"
+export NZB_API_APIKEY="YOURAPIKEY"
+```
+
+Then run `npm test` to run the tests.
 
 ### License
 

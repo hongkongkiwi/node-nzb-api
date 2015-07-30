@@ -1,8 +1,8 @@
 var request = require('request');
 var makeUrl = require('make-url');
 var xtend = require('xtend');
-var Q = require('q');
 var log = require('debug')('nzbapi::log');
+var Q = require('q');
 
 var NZBApi = function(options) {
   this.options = xtend({
@@ -22,7 +22,7 @@ var NZBApi = function(options) {
 
     log(url);
 
-    request({url: url, json: true}, function(err, response, body) {
+    return request({url: url, json: true}, function(err, response, body) {
       var deferred = Q.defer()
       if (err) {
         deferred.reject(err);
@@ -35,15 +35,36 @@ var NZBApi = function(options) {
 }
 
 NZBApi.prototype.getCapabilities = function(callback) {
+  var args = Array.prototype.slice.call(arguments, 0);
+  callback = args.pop();
+
   return this._request('caps', callback);
 }
 
 NZBApi.prototype.registerAccount = function(emailAddress, callback) {
-  return this._request('register', {email: emailAddress}, callback);
+  var args = Array.prototype.slice.call(arguments, 0);
+  callback = args.pop();
+
+  var params = {
+    email: emailAddress
+  }
+
+  return this._request('register', params, callback);
 }
 
-NZBApi.prototype.searchAll = function(query, callback) {
-  return this._request('search', {q: name}, callback);
+NZBApi.prototype.searchAll = function(name, returnExtended, callback) {
+  var args = Array.prototype.slice.call(arguments, 0);
+  callback = args.pop();
+
+  var params = {
+    q: name,
+  }
+
+  if (typeof returnExtended === 'boolean') {
+    params.extended = returnExtended;
+  }
+
+  return this._request('search', params, callback);
 }
 
 NZBApi.prototype.searchTv = function(name, returnExtended, season, episode, callback) {
@@ -51,9 +72,14 @@ NZBApi.prototype.searchTv = function(name, returnExtended, season, episode, call
   callback = args.pop();
 
   var params = {
-    q: query,
-    season: season,
-    ep: episode
+    q: name,
+  }
+
+  if (typeof season === 'number' || typeof season === 'number') {
+    params.season = season;
+  }
+  if (typeof episode === 'number' || typeof episode === 'number') {
+    params.episode = episode;
   }
   if (typeof categories === 'array') {
     params.cat = categories.join(',');
@@ -61,6 +87,7 @@ NZBApi.prototype.searchTv = function(name, returnExtended, season, episode, call
   if (typeof returnExtended === 'boolean') {
     params.extended = returnExtended;
   }
+
   return this._request('tvsearch', params, callback);
 }
 
@@ -80,12 +107,26 @@ NZBApi.prototype.searchMovies = function(imdbId, returnExtended, categories, cal
   return this._request('movie', params, callback);
 }
 
-NZBApi.prototype.getNzbDetails = function(nzbId, callback) {
-  return this._request('details', {id: nzbId}, callback);
+NZBApi.prototype.getNzbDetails = function(id, callback) {
+  var args = Array.prototype.slice.call(arguments, 0);
+  callback = args.pop();
+
+  var params = {
+    id: id
+  }
+
+  return this._request('details', params, callback);
 }
 
-NZBApi.prototype.downloadNzb = function(nzbId, callback) {
-  return this._request('get', {id: nzbId}, callback);
+NZBApi.prototype.downloadNzb = function(id, callback) {
+  var args = Array.prototype.slice.call(arguments, 0);
+  callback = args.pop();
+
+  var params = {
+    id: id
+  }
+
+  return this._request('get', params, callback);
 }
 
 module.exports = NZBApi;
