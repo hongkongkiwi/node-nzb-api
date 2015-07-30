@@ -1,61 +1,82 @@
-# nzbget-api
-A complete NZBGet API implementation library with extensive tests.
+# nzb-api
+A simple implementation of the NZB api that's used by many Newsbin indexers.
 
 ### To Install
 
-`npm install nzbget-api`
+`npm install nzb-api`
 
 ### To Use
 
 ```
-var nzbGet = require('nzbget-api');
+var nzbGet = require('nzb-api');
 
 var options = {
-  host: '127.0.0.1',
-  port: 6789,
-  login: 'yourusername',
-  hash: 'yourpassword'
+  apiEndPoint: "https://yourindexer.com",
+  apiKey: "YOURAPIKEY"
 }
 
-var nzbGet = new NZBGet(options);
+var nzbApi = new NZBApi(options);
 ```
 
-Once you have the nzbGet object you can make the calls using the following:
+Once you have the nzbApi object you can make the calls using the following:
 
 ```
-// Get the NZBGet server version
-nzbGet.version(function(err, result) {
-  console.log(result.version);
+// Get the capabilities of the server
+nzbApi.getCapabilities(function(err, result) {
+  if (err) return console.error(err);
+  console.log(result);
 });
 
-// Reload the server
-nzbGet.reload(function(err, result) {
+// Register a new account (not all servies support this function)
+nzbApi.registerAccount(emailAddress, function(err, result) {
+  if (err) return console.error(err);
+  console.log(result);
 });
 
-// Shutdown the server
-nzbGet.shutdown(function(err, result) {
+// Search for everything
+// returnExtended = true (show extended details)
+nzbApi.searchAll(name, returnExtended, function(err, result) {
+  if (err) return console.error(err);
+  console.log(result);
 });
 
-// List groups
-nzbGet.listGroups(function(err, result) {
+// Search for tv shows/episodes
+// returnExtended = true (show extended details)
+// season = XX (season number)
+// episode = XX (episode number)
+nzbApi.searchTv(name, returnExtended, season, episode, function(err, result) {
+  if (err) return console.error(err);
+  console.log(result);
 });
 
-// Get History (without hidden)
-nzbGet.history(false, function(err, result) {
+// Search for movies using the imdbId
+// returnExtended = true (show extended details)
+// categories = [] (array of categories to search)
+nzbApi.searchMovies(imdbId, returnExtended, categories, function(err, result) {
+  if (err) return console.error(err);
+  console.log(result);
+});
+
+// Get details about an Newsbin file by ID
+nzbApi.getNzbDetails(nzbId, function(err, result) {
+  if (err) return console.error(err);
+  console.log(result);
+});
+
+// Download the Newsbin file by ID
+nzbApi.downloadNzb(nzbId, function(err, result) {
+  if (err) return console.error(err);
+  console.log(result);
 });
 ```
-
-Have a look at the [NZBGet API](https://github.com/nzbget/nzbget/wiki/API) for a full list of functions.
 
 ### Testing
 
-`npm test`
-
-The testing is done with mocha and nock with saved JSON responses. You do not need a live server to perform the tests.
+Not implemented yet
 
 ### License
 
-This project is under the MIT License. See [license file](https://raw.githubusercontent.com/hongkongkiwi/nzbget-api/master/LICENSE) for more details.
+This project is under the MIT License. See [license file](https://raw.githubusercontent.com/hongkongkiwi/node-nzb-api/master/LICENSE) for more details.
 
 ### Contributing
 
