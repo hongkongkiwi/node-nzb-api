@@ -5,18 +5,20 @@ A simple implementation of the NZB api that's used by many Newsbin indexers.
 
 `npm install nzb-api`
 
-### To Use
+Before using you will need to setup some options, for example:
 
 ```
 var nzbGet = require('nzb-api');
 
-var options = {
+var nzbApi = new NZBApi({
   apiEndPoint: "https://yourindexer.com",
   apiKey: "YOURAPIKEY"
-}
-
-var nzbApi = new NZBApi(options);
+});
 ```
+
+### Using NZB-Api methods
+
+#### With traditional node.js callbacks
 
 Once you have the nzbApi object you can make the calls using the following:
 
@@ -69,6 +71,19 @@ nzbApi.downloadNzb(nzbId, function(err, result) {
   console.log(result);
 });
 ```
+
+#### With promises (powered by Q)
+
+```
+// Get the capabilities of the server
+nzbApi.getCapabilities().then(result) {
+  console.log(result);
+.error(function(err) {
+  console.error(err);
+});
+```
+
+All functions are promise enabled.
 
 ### Testing
 
