@@ -10,11 +10,11 @@
     "test": "mocha"
   },
   "bugs": {
-    "url" : "https://github.com/hongkongkiwi/node-nzb-api/issues"
+    "url": "https://github.com/hongkongkiwi/node-nzb-api/issues"
   },
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/hongkongkiwi/node-nzb-api.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hongkongkiwi/node-nzb-api.git"
   },
   "author": "Andy Savage <andy@savage.hk>",
   "license": "MIT",
@@ -29,6 +29,7 @@
   "dependencies": {
     "debug": "^2.2.0",
     "make-url": "0.0.1",
+    "node-http-error": "^0.2.0",
     "q": "^1.4.1",
     "request": "^2.60.0",
     "xtend": "^4.0.0"

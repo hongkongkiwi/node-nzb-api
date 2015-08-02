@@ -1,8 +1,9 @@
-var request = require('request');
 var makeUrl = require('make-url');
 var xtend = require('xtend');
 var log = require('debug')('nzbapi::log');
 var Q = require('q');
+var request = Q.nfbind(require('request'));
+var HTTPError = require('node-http-error');
 
 var NZBApi = function(options) {
   this.options = xtend({
@@ -22,15 +23,12 @@ var NZBApi = function(options) {
 
     log(url);
 
-    return request({url: url, json: true}, function(err, response, body) {
-      var deferred = Q.defer()
-      if (err) {
-        deferred.reject(err);
-      } else {
-        deferred.resolve(body);
-      }
-      return deferred.promise.nodeify(callback);
-    });
+    return request({url: url, json: true})
+    .spread(function(response, body) {
+        if (response.statusCode !== 200) throw new HTTPError(response.statusCode);
+        return body;
+    })
+    .nodeify(callback);
   }
 }
 
