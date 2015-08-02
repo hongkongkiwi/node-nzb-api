@@ -1,6 +1,6 @@
 {
   "name": "nzb-api",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A simple implementation of the NZB api that's used by many Newsbin indexers.",
   "main": "index.js",
   "directories": {
